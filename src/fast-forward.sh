@@ -282,7 +282,7 @@ LOG=$(mktemp)
              -H "Accept: application/vnd.github+json" \
              -H "Authorization: Bearer $GITHUB_TOKEN" \
              -H "X-GitHub-Api-Version: 2022-11-28" \
-             $COLLABORATORS_URL/$(github_event .sender.login)/permission
+             "$COLLABORATORS_URL/$(github_event .sender.login)/permission"
 
         if test "x$(jq -r .user.permissions.push < $PERM)" = xtrue
         then

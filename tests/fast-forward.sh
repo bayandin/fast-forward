@@ -170,7 +170,7 @@ curl --silent --show-error --output $REPO_PROPERTIES -L \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer $TOKEN" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/repos/$OWNER/$REPO
+  "https://api.github.com/repos/$OWNER/$REPO"
 DEFAULT_BRANCH=$(jq -r ".default_branch" < $REPO_PROPERTIES)
 if test x$DEFAULT_BRANCH = x
 then
@@ -247,7 +247,7 @@ curl --silent --show-error --output $OPEN_PR_RESULT -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $TOKEN" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
-    https://api.github.com/repos/$OWNER/$REPO/pulls \
+    "https://api.github.com/repos/$OWNER/$REPO/pulls" \
     -d '{
       "title":"/fast-forward unit test",
       "body":"This is a test, this is only a test!",
@@ -308,7 +308,7 @@ function wait_for_comment {
              -H "Accept: application/vnd.github+json" \
              -H "Authorization: Bearer $TOKEN" \
              -H "X-GitHub-Api-Version: 2022-11-28" \
-             https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/comments
+             "https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/comments"
 
         COMMENT=$(jq -r .[$N].body <"$COMMENTS_RESULT")
         if test "x$COMMENT" = xnull
@@ -344,7 +344,7 @@ curl --silent --show-error -L \
      -H "Accept: application/vnd.github+json" \
      -H "Authorization: Bearer $TOKEN" \
      -H "X-GitHub-Api-Version: 2022-11-28" \
-     https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/comments \
+     "https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/comments" \
      -d '{ "body":"/fast-forward this..." }'
 
 COMMENT=$(wait_for_comment 2)
@@ -393,7 +393,7 @@ curl --silent --show-error -L \
      -H "Accept: application/vnd.github+json" \
      -H "Authorization: Bearer $TOKEN" \
      -H "X-GitHub-Api-Version: 2022-11-28" \
-     https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/comments \
+     "https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/comments" \
      -d '{ "body":"We should /fast-forward this..." }'
 
 COMMENT=$(wait_for_comment 5)
@@ -442,7 +442,7 @@ curl --silent --show-error --output $MERGED_PR_RESULT -L \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer $TOKEN" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER
+  "https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER"
 
 STATE=$(jq -r .state <"$MERGED_PR_RESULT")
 if test "x$STATE" != xclosed
