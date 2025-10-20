@@ -273,22 +273,7 @@ LOG=$(mktemp)
         # Check that the user is allowed and then fast forward the
         # target!
 
-        # https://docs.github.com/en/rest/collaborators/collaborators?apiVersion=2022-11-28#get-repository-permissions-for-a-user
-        COLLABORATORS_URL="$(github_event .repository.collaborators_url)"
-        COLLABORATORS_URL="${COLLABORATORS_URL%\{/collaborator\}}"
-
-        PERM=$(mktemp)
-        curl --silent --show-error -o "$PERM" --location --globoff \
-             -H "Accept: application/vnd.github+json" \
-             -H "Authorization: Bearer $GITHUB_TOKEN" \
-             -H "X-GitHub-Api-Version: 2022-11-28" \
-             "$COLLABORATORS_URL/$(github_event .sender.login)/permission"
-
-        echo "***********************************************************"
-        cat $PERM
-        echo "***********************************************************"
-
-        if test "x$(jq -r .user.permissions.push < $PERM)" = xtrue
+        if git push origin --dry-run "$PR_SHA:$BASE_REF" 2>/dev/null
         then
             echo -n "Fast forwarding \`$BASE_REF\` ($BASE_SHA) to"
             echo " \`$PR_REF\` ($PR_SHA)."
