@@ -284,6 +284,10 @@ LOG=$(mktemp)
              -H "X-GitHub-Api-Version: 2022-11-28" \
              "$COLLABORATORS_URL/$(github_event .sender.login)/permission"
 
+        echo "***********************************************************"
+        cat $PERM
+        echo "***********************************************************"
+
         if test "x$(jq -r .user.permissions.push < $PERM)" = xtrue
         then
             echo -n "Fast forwarding \`$BASE_REF\` ($BASE_SHA) to"
